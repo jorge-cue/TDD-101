@@ -1,5 +1,7 @@
 package org.example.scheduler;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -10,14 +12,20 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CommandTest {
 
     private final Instant i0 = Instant.now();
 
+    @BeforeEach
+    void setUp() {
+        Command.clock = Clock.fixed(i0, ZoneOffset.UTC);
+    }
 
     @ParameterizedTest(name = "index: delay {0} ms")
     @ValueSource(longs = {0L, 1_000L, 5_000L})
@@ -59,6 +67,45 @@ class CommandTest {
                 Arguments.of("To run one after second, created at same time", 0, 2_000L, 0, 0L, 1),
                 Arguments.of("To run one after second, created one before second", 0, 5_000L, 1, 2_000L, 1)
         );
+    }
+
+    @Test
+    void validateCommandStateWhenCreatingACommand() {
+        Command.clock = null;
+        var exception = assertThrows(IllegalStateException.class, () -> new ConcreteCommand(0L));
+        assertEquals("Command.clock is not set", exception.getMessage());
+    }
+
+    @Test
+    void validateGetDelayArgumentsAndCommandState() {
+        var command = new ConcreteCommand(0L);
+        var exception = assertThrows(NullPointerException.class, () -> command.getDelay(null));
+        assertEquals("argument 'timeUnit' is required", exception.getMessage());
+        Command.clock = null;
+        var exception1 = assertThrows(IllegalStateException.class, () -> command.getDelay(TimeUnit.SECONDS));
+        assertEquals("Command.clock is not set", exception1.getMessage());
+    }
+
+    @Test
+    void validateCompareToArguments() {
+        var command = new ConcreteCommand(0L);
+        var invalidCommand = new InvalidCommand();
+        var exception = assertThrows(NullPointerException.class, () -> command.compareTo(null));
+        assertEquals("argument 'delayed' is required", exception.getMessage());
+        var exception1 = assertThrows(IllegalArgumentException.class, () -> command.compareTo(invalidCommand));
+        assertEquals("argument 'delayed' is not a Command", exception1.getMessage());
+    }
+
+    static class InvalidCommand implements Delayed {
+        @Override
+        public long getDelay(TimeUnit timeUnit) {
+            return 0;
+        }
+
+        @Override
+        public int compareTo(Delayed delayed) {
+            return 0;
+        }
     }
 
     static class ConcreteCommand extends Command {
