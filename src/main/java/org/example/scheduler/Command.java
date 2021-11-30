@@ -19,6 +19,6 @@ public abstract class Command implements Delayed, Runnable {
     }
 
     public final int compareTo(Delayed delayed) {
-        return 0;
+        return Long.compare(timeToRun, ((Command)delayed).timeToRun);
     }
 }

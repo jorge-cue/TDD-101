@@ -1,6 +1,5 @@
 package org.example.scheduler;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -10,7 +9,6 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -54,12 +52,12 @@ class CommandTest {
 
     static Collection<Arguments> comparesCommandsByTimeToRunArguments() {
         return List.of(
-                Arguments.of("To run at same time, created at different times", 1, 0L, 0, 1L, 0),
+                Arguments.of("To run at same time, created at different times", 1, 0L, 0, 1_000L, 0),
                 Arguments.of("To run at same time, created at same time", 0, 0L, 0, 0L, 0),
                 Arguments.of("To run one before second, created at same time", 0, 0L, 0, 1_000L, -1),
                 Arguments.of("To run one before second, created at different times", 1, 0L, 2, 0L, -1),
-                Arguments.of("To run one after second, created at same time", 0, 2_000L, 0, 0L, -1),
-                Arguments.of("To run one after second, created at different time", 0, 5_000L, 1, 0L, -1)
+                Arguments.of("To run one after second, created at same time", 0, 2_000L, 0, 0L, 1),
+                Arguments.of("To run one after second, created one before second", 0, 5_000L, 1, 2_000L, 1)
         );
     }
 
