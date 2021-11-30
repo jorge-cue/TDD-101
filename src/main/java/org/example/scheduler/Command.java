@@ -8,8 +8,14 @@ public abstract class Command implements Delayed, Runnable {
 
     protected static Clock clock = Clock.systemUTC();
 
+    private final long timeToRun;
+
+    protected Command(long delayInMillis) {
+        this.timeToRun = clock.millis() + delayInMillis;
+    }
+
     public final long getDelay(TimeUnit timeUnit) {
-        return 0;
+        return timeUnit.convert(timeToRun - clock.millis(), TimeUnit.MILLISECONDS);
     }
 
     public final int compareTo(Delayed delayed) {

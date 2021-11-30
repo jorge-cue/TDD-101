@@ -4,7 +4,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Clock;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +37,7 @@ class CommandTest {
     static class ConcreteCommand extends Command {
 
         public ConcreteCommand(long delayInMillis) {
+            super(delayInMillis);
         }
 
         public void run() {
