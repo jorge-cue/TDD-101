@@ -3,28 +3,30 @@ package org.example.model;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumSet;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.example.model.NyPizza.Size.LARGE;
+import static org.example.model.Pizza.Topping.HAM;
+import static org.example.model.Pizza.Topping.MEAT;
+import static org.example.model.Pizza.Topping.MUSHROOM;
+import static org.example.model.Pizza.Topping.ONION;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NyPizzaTest {
 
     @Test
-    void nyPizzaIsImmutable() {
-        assertAll(
-                () -> {
-                    var pizza = new NyPizza.Builder(NyPizza.Size.LARGE).addTopping(Pizza.Topping.MEAT).build();
-                    var toppings = pizza.getToppings();
-                    toppings.add(Pizza.Topping.ONION);
-                    assertEquals(EnumSet.of(Pizza.Topping.MEAT), pizza.getToppings(), "NyPizza is not immutable, altering getTopics() return type");
-                },
-                () -> {
-                    var builder = new NyPizza.Builder(NyPizza.Size.LARGE);
-                    var pizza = builder.addTopping(Pizza.Topping.MEAT).build();
-                    builder.addTopping(Pizza.Topping.ONION);
-                    assertEquals(EnumSet.of(Pizza.Topping.MEAT), pizza.getToppings(), "NyPizza is not immutable, altering builder");
-                }
-        );
+    void nyPizzaPropertiesAreImmutable() {
+        var pizza = new NyPizza.Builder(LARGE).addTopping(MEAT).build();
+        var toppings = pizza.getToppings();
+        toppings.add(ONION);
+        assertEquals(Set.of(MEAT), pizza.getToppings(), "NyPizza is not immutable, altering getTopics() return type");
+    }
 
+    @Test
+    void nyPizzaIsImmutableAfterBuild() {
+        var builder = new NyPizza.Builder(LARGE).addTopping(MUSHROOM);
+        var pizza1 = builder.build();
+        builder.addTopping(HAM);
+        assertEquals(Set.of(MUSHROOM), pizza1.getToppings());
     }
 }
