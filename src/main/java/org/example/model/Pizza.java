@@ -24,10 +24,10 @@ public abstract class Pizza {
     }
 
     protected Pizza(Builder<?> builder) {
-        toppings = builder.toppings;
+        toppings = EnumSet.copyOf(builder.toppings);
     }
 
     Set<Topping> getToppings() {
-        return toppings;
+        return EnumSet.copyOf(toppings);
     }
 }
