@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import java.util.Set;
 
 import static org.example.model.Pizza.Topping.MEAT;
-import static org.example.model.Pizza.Topping.ONION;
+import static org.example.model.Pizza.Topping.PEPPER;
 import static org.example.model.Pizza.Topping.SAUSAGE;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CalzoneTest {
 
@@ -15,7 +15,7 @@ class CalzoneTest {
     void calzonePropertiesAreImmutable() {
         final var calzone = new Calzone.Builder().addTopping(MEAT).build();
         var toppings = calzone.getToppings();
-        toppings.add(ONION);
+        toppings.add(PEPPER);
         assertEquals(Set.of(MEAT), calzone.getToppings());
     }
 

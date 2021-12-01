@@ -38,8 +38,8 @@ class SchedulerTest {
         scheduler = new Scheduler();
 
         // To get access to scheduler's queue we use Reflection
-        Field field = scheduler.getClass().getDeclaredField("queue");
-        field.setAccessible(true);
+        Field field = Scheduler.class.getDeclaredField("queue");
+        field.setAccessible(true); // To override 'private' qualifier
         //noinspection unchecked
         queue = (DelayQueue<Command>) field.get(scheduler);
     }

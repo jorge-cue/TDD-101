@@ -6,7 +6,7 @@ import java.util.Set;
 public abstract class Pizza {
     public enum Topping { HAM, MUSHROOM, ONION, PEPPER, SAUSAGE, MEAT }
 
-    final Set<Topping> toppings;
+    private final Set<Topping> toppings;
 
     abstract static class Builder<T extends Builder<T>> {
 

@@ -7,7 +7,7 @@ import java.util.concurrent.DelayQueue;
 import java.util.stream.Collectors;
 
 public class Scheduler {
-    @SuppressWarnings("unused")
+
     private final DelayQueue<Command> queue = new DelayQueue<>();
 
     public void enqueue(Collection<? extends Command> commands) {

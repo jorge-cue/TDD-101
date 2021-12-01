@@ -25,8 +25,8 @@ class NyPizzaTest {
     @Test
     void nyPizzaIsImmutableAfterBuild() {
         var builder = new NyPizza.Builder(LARGE).addTopping(MUSHROOM);
-        var pizza1 = builder.build();
+        var pizza = builder.build();
         builder.addTopping(HAM);
-        assertEquals(Set.of(MUSHROOM), pizza1.getToppings());
+        assertEquals(Set.of(MUSHROOM), pizza.getToppings());
     }
 }
